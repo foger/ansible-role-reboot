@@ -1,0 +1,65 @@
+---
+# tasks file for reboot
+
+- name: Install requirements
+  package: name="{{ reboot_requirements }}" state=present
+  register: install_requirements_result
+  until: install_requirements_result is succeeded
+  retries: 3
+  tags: install
+
+- name: Get <needs-restaring> stat for RHEL
+  stat:
+    path: /usr/bin/needs-restarting
+  register: needs_restarting_stat
+
+- name: Get <reboot-required> stat for Debian
+  stat:
+    path: /var/run/reboot-required
+  register: reboot_required_stat
+
+
+- name: Check if needs-restaring for RHEL
+  command: "{{ reboot_needs_restarting_command }}"
+  register: needsrestarting
+  changed_when: needsrestarting.rc != 0
+  failed_when:
+    - needsrestarting.rc not in [0, 1]
+  when:
+    - needs_restarting_stat.stat.exists
+    - not reboot_always | bool
+  tags: checkrh
+
+- name: Check if FreeBSD should be restarted
+  command: freebsd-version -k
+  register: freebsd_version
+  changed_when: freebsd_version.stdout != ansible_kernel
+  failed_when:
+    - freebsd_version.rc != 0
+  when:
+    - not reboot_always | bool
+  notify:
+    - debug freebsd
+  tags: checkfbsd
+
+- name: flush handlers
+  meta: flush_handlers
+
+- name: "Reboot the machine: {{ ansible_hostname | default(inventory_hostname, True) }}"
+  reboot:
+    pre_reboot_delay: "{{ reboot_delay }}"
+    post_reboot_delay: "{{ reboot_check }}"
+    msg: "{{ reboot_message }}"
+  async: 1
+  poll: 0
+  ignore_errors: yes
+  register: reboot_result
+  notify:
+    - gather facts
+    - print result
+  when:
+    - reboot_always | bool
+      or (needs_restarting_stat.stat.exists and needsrestarting.rc == 1)
+      or reboot_required_stat.stat.exists
+      or freebsd_version.changed
+  tags: reboot

@@ -1,0 +1,14 @@
+---
+# defaults file for reboot
+
+# Don't check if system needs to be restarted
+reboot_always: no
+
+# Wait <N> seconds before reboot
+reboot_delay: 5
+
+# Check if host is up after <N> seconds
+reboot_check: 10
+
+# Show this message to users
+reboot_message: "Rebooting server <{{ ansible_hostname | default(inventory_hostname, True) }}> with Ansible"

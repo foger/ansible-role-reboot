@@ -1,0 +1,31 @@
+---
+# handlers file for reboot
+
+- name: gather facts
+  setup:
+
+
+- name: print uptime
+  debug:
+    msg: "Uptime: {{ ansible_uptime_seconds }} sec."
+  when: ansible_distribution != 'FreeBSD'
+  listen: 
+
+
+- name: debug freebsd
+  debug:
+    msg:
+      - New kernel - {{ freebsd_version.stdout }}
+      - Active kernel - {{ ansible_kernel }}
+      - Changed - {{ freebsd_version.changed }}
+
+
+- name: print result
+  debug:
+    msg: |
+      Always reboot: {{ reboot_always }}
+      {% if reboot_result['rebooted']|default(False)|bool == True %}
+        <{{ ansible_hostname | default(inventory_hostname, True) }}> has been successfully restarted!
+      {% else %}
+        Failed to restart <{{ ansible_hostname }}>
+      {% endif %}

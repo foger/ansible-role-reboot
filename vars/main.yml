@@ -1,0 +1,11 @@
+---
+# vars file for reboot
+
+_reboot_requirements:
+  default: []
+  CentOS: yum-utils
+  Fedora: dnf-utils
+
+reboot_requirements: "{{ _reboot_requirements[ansible_distribution] | default(_reboot_requirements['default']) }}"
+
+reboot_needs_restarting_command: needs-restarting -r
