@@ -14,6 +14,10 @@ Tested:
 
 Ansible version >= 2.7
 
+TODO:
+
+- Ansible version < 2.7 support (without `reboot` module)
+
 ## Role Variables
 
 ### Defaults
