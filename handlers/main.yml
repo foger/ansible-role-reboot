@@ -12,6 +12,10 @@
   listen: 
 
 
+- name: debug freebsd python
+  debug:
+    msg: "{{ freebsd_python_install }}"
+
 - name: debug freebsd
   debug:
     msg:

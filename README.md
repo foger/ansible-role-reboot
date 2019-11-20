@@ -2,6 +2,8 @@
 
 Ansible Role for rebooting servers
 
+![Travis CI](https://travis-ci.org/foger/ansible-role-reboot.svg?branch=master)
+
 ## Requirements
 
 Tested:

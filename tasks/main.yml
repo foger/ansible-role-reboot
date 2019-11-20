@@ -8,6 +8,10 @@
   retries: 3
   tags: install
 
+
+## TODO: FreeBSD Python install...
+
+
 - name: Get <needs-restaring> stat for RHEL
   stat:
     path: /usr/bin/needs-restarting
