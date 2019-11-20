@@ -9,7 +9,7 @@
   debug:
     msg: "Uptime: {{ ansible_uptime_seconds }} sec."
   when: ansible_distribution != 'FreeBSD'
-  listen: 
+  listen:
 
 
 - name: debug freebsd python
@@ -28,7 +28,7 @@
   debug:
     msg: |
       Always reboot: {{ reboot_always }}
-      {% if reboot_result['rebooted']|default(False)|bool == True %}
+      {% if reboot_result['rebooted']|default(False)|bool %}
         <{{ ansible_hostname | default(inventory_hostname, True) }}> has been successfully restarted!
       {% else %}
         Failed to restart <{{ ansible_hostname }}>
