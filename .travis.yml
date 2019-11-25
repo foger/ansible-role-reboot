@@ -24,8 +24,8 @@ install:
  
 before_script:
   - cd ../
-  - mv ansible-role-$ROLE_NAME avinetworks.$ROLE_NAME
-  - cd avinetworks.$ROLE_NAME
+  - mv ansible-role-$ROLE_NAME foger.$ROLE_NAME
+  - cd foger.$ROLE_NAME
  
 script:
   - molecule test
