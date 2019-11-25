@@ -1,16 +1,17 @@
 ---
 # tasks file for reboot
 
+- include_tasks: freebsd.yml
+
+- name: Gather facts
+  setup:
+
 - name: Install requirements
   package: name="{{ reboot_requirements }}" state=present
   register: install_requirements_result
   until: install_requirements_result is succeeded
   retries: 3
   tags: install
-
-
-## TODO: FreeBSD Python install...
-
 
 - name: Get <needs-restaring> stat for RHEL
   stat:

@@ -1,6 +1,7 @@
 ---
 # handlers file for reboot
 
+
 - name: gather facts
   setup:
 
@@ -14,7 +15,9 @@
 
 - name: debug freebsd python
   debug:
-    msg: "{{ freebsd_python_install }}"
+    msg:
+      - "{{ freebsd_python_install }}"
+
 
 - name: debug freebsd
   debug:
