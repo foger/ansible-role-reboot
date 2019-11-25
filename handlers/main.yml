@@ -1,7 +1,6 @@
 ---
 # handlers file for reboot
 
-
 - name: gather facts
   setup:
 

@@ -8,7 +8,6 @@
     - freebsd_version.rc != 0
   when:
     - not reboot_always | bool
-    - ansible_distribution == 'FreeBSD'
   notify:
     - debug freebsd
   tags: checkfbsd

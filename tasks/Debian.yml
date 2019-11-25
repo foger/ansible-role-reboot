@@ -1,0 +1,8 @@
+---
+
+- name: Get <reboot-required> stat for Debian
+  stat:
+    path: /var/run/reboot-required
+  register: reboot_required_stat
+  when:
+    - not reboot_always | bool

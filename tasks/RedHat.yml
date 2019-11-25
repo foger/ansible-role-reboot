@@ -1,0 +1,17 @@
+---
+
+- name: Get <needs-restaring> stat for RHEL
+  stat:
+    path: /usr/bin/needs-restarting
+  register: needs_restarting_stat
+
+- name: Check if needs-restaring for RHEL
+  command: "{{ reboot_needs_restarting_command }}"
+  register: needsrestarting
+  changed_when: needsrestarting.rc != 0
+  failed_when:
+    - needsrestarting.rc not in [0, 1]
+  when:
+    - needs_restarting_stat.stat.exists
+    - not reboot_always | bool
+  tags: checkrh

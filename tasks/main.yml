@@ -1,12 +1,13 @@
 ---
 # tasks file for reboot
 
-- import_tasks: freebsd_python.yml
+- include_tasks: freebsd_python.yml
+  when: is_freebsd
 
 - name: Gather facts
   setup:
 
-- import_tasks: freebsd_check.yml
+- include_tasks: "{{ ansible_os_family }}.yml"
 
 
 - name: Install requirements
@@ -17,35 +18,11 @@
   tags: install
 
 
-- name: Get <needs-restaring> stat for RHEL
-  stat:
-    path: /usr/bin/needs-restarting
-  register: needs_restarting_stat
-
-
-- name: Get <reboot-required> stat for Debian
-  stat:
-    path: /var/run/reboot-required
-  register: reboot_required_stat
-
-
-- name: Check if needs-restaring for RHEL
-  command: "{{ reboot_needs_restarting_command }}"
-  register: needsrestarting
-  changed_when: needsrestarting.rc != 0
-  failed_when:
-    - needsrestarting.rc not in [0, 1]
-  when:
-    - needs_restarting_stat.stat.exists
-    - not reboot_always | bool
-  tags: checkrh
-
-
 - name: flush handlers
   meta: flush_handlers
 
 
-- name: "Reboot the machine: {{ ansible_hostname | default(inventory_hostname, True) }}"
+- name: Reboot the machine
   reboot:
     pre_reboot_delay: "{{ reboot_delay }}"
     post_reboot_delay: "{{ reboot_check }}"
@@ -59,7 +36,7 @@
     - print result
   when:
     - reboot_always | bool
-      or (needs_restarting_stat.stat.exists and needsrestarting.rc == 1)
-      or reboot_required_stat.stat.exists
-      or freebsd_version.changed
+      or (reboot_required_stat is defined and reboot_required_stat.stat.exists)
+      or (needs_restarting_stat is defined and needs_restarting_stat.stat.exists and needsrestarting.rc == 1)
+      or (freebsd_version is defined and freebsd_version.changed)
   tags: reboot
