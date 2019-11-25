@@ -11,7 +11,13 @@ env:
     - ROLE_NAME: reboot
   matrix:
     - MOLECULE_DISTRO: centos:7
+    - MOLECULE_DISTRO: fedora:31
     - MOLECULE_DISTRO: ubuntu:bionic
+    - MOLECULE_DISTRO: ubuntu:xenial
+    - MOLECULE_DISTRO: debian:jessie
+    - MOLECULE_DISTRO: debian:stretch
+    - MOLECULE_DISTRO: freebsd:11
+
 
 install:
   - pip install testinfra molecule docker
