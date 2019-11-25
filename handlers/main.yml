@@ -29,4 +29,3 @@
 - name: print result
   debug:
     msg: "{{ lookup('template', 'result.j2') }}"
-
