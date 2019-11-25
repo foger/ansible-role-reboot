@@ -1,29 +1,34 @@
 ---
 language: python
-python: "3.7"
-
-# Use the new container infrastructure
-sudo: false
-
-# Install ansible
-addons:
-  apt:
-    packages:
-    - python-pip
-
+services:
+  - docker
+ 
+before_install:
+  - sudo apt-get -qq update
+ 
+env:
+  global:
+    - ROLE_NAME: reboot
+  matrix:
+    - MOLECULE_DISTRO: centos:7
+    - MOLECULE_DISTRO: fedora:27
+    - MOLECULE_DISTRO: fedora:28
+    - MOLECULE_DISTRO: ubuntu-upstart:trusty
+    - MOLECULE_DISTRO: ubuntu:xenial
+    - MOLECULE_DISTRO: ubuntu:bionic
+    - MOLECULE_DISTRO: debian:jessie
+    - MOLECULE_DISTRO: debian:stretch
+ 
 install:
-  # Install ansible
-  - pip install ansible
-
-  # Check ansible version
-  - ansible --version
-
-  # Create ansible.cfg with correct roles_path
-  - printf '[defaults]\nroles_path=../' >ansible.cfg
-
+  - pip install testinfra molecule docker
+ 
+before_script:
+  - cd ../
+  - mv ansible-role-$ROLE_NAME avinetworks.$ROLE_NAME
+  - cd avinetworks.$ROLE_NAME
+ 
 script:
-  # Basic role syntax check
-  - ansible-playbook tests/test.yml -i tests/inventory --syntax-check
-
+  - molecule test
+ 
 notifications:
   webhooks: https://galaxy.ansible.com/api/v1/notifications/
