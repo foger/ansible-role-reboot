@@ -10,7 +10,7 @@
   debug:
     msg: "Uptime: {{ ansible_uptime_seconds }} sec."
   when: ansible_distribution != 'FreeBSD'
-  listen:
+  listen: gather facts
 
 
 - name: debug freebsd python
