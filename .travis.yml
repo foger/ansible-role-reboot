@@ -3,21 +3,17 @@ language: python
 services:
   - docker
 
-before_install:
-  - sudo apt-get -qq update
+#before_install:
+#  - sudo apt-get -qq update
 
 env:
   global:
     - ROLE_NAME: reboot
   matrix:
-    - MOLECULE_DISTRO: centos:7
-    - MOLECULE_DISTRO: fedora:31
-    - MOLECULE_DISTRO: ubuntu:bionic
-    - MOLECULE_DISTRO: ubuntu:xenial
-    - MOLECULE_DISTRO: debian:jessie
-    - MOLECULE_DISTRO: debian:stretch
-    - MOLECULE_DISTRO: freebsd:11
-
+    - MOLECULE_DISTRO: centos7
+    - MOLECULE_DISTRO: ubuntu1804
+    - MOLECULE_DISTRO: ubuntu1604
+    - MOLECULE_DISTRO: debian9
 
 install:
   - pip install testinfra molecule docker
