@@ -1,6 +1,5 @@
 skip_list:
   - '503'
-  - '701'
 
 exclude_paths:
   - ./meta/version.yml
