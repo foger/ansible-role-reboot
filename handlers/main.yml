@@ -29,10 +29,5 @@
 
 - name: print result
   debug:
-    msg: |
-      Always reboot: {{ reboot_always }}
-      {% if reboot_result['rebooted']|default(False)|bool %}
-        <{{ ansible_hostname | default(inventory_hostname, True) }}> has been successfully restarted!
-      {% else %}
-        Failed to restart <{{ ansible_hostname }}>
-      {% endif %}
+    msg: "{{ lookup('template', 'result.j2') }}"
+

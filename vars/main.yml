@@ -1,6 +1,9 @@
 ---
 # vars file for reboot
 
+# for raw check - freebsd servers group is 'freebsd'
+is_freebsd: '{{ "freebsd" in hostvars[inventory_hostname].group_names }}'
+
 _reboot_requirements:
   default: []
   CentOS: yum-utils

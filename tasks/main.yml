@@ -1,10 +1,13 @@
 ---
 # tasks file for reboot
 
-- include_tasks: freebsd.yml
+- import_tasks: freebsd_python.yml
 
 - name: Gather facts
   setup:
+
+- import_tasks: freebsd_check.yml
+
 
 - name: Install requirements
   package: name="{{ reboot_requirements }}" state=present
@@ -13,10 +16,12 @@
   retries: 3
   tags: install
 
+
 - name: Get <needs-restaring> stat for RHEL
   stat:
     path: /usr/bin/needs-restarting
   register: needs_restarting_stat
+
 
 - name: Get <reboot-required> stat for Debian
   stat:
@@ -35,20 +40,10 @@
     - not reboot_always | bool
   tags: checkrh
 
-- name: Check if FreeBSD should be restarted
-  command: freebsd-version -k
-  register: freebsd_version
-  changed_when: freebsd_version.stdout != ansible_kernel
-  failed_when:
-    - freebsd_version.rc != 0
-  when:
-    - not reboot_always | bool
-  notify:
-    - debug freebsd
-  tags: checkfbsd
 
 - name: flush handlers
   meta: flush_handlers
+
 
 - name: "Reboot the machine: {{ ansible_hostname | default(inventory_hostname, True) }}"
   reboot:

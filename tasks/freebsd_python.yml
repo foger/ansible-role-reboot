@@ -3,7 +3,7 @@
 - name: raw install Python for FreeBSD
   raw: pkg install -y python3
   register: freebsd_python_install
-  when: '"freebsd" in hostvars[inventory_hostname].group_names'
+  when: is_freebsd | bool
   changed_when: '"New packages to be INSTALLED" in freebsd_python_install.stdout'
   failed_when: freebsd_python_install.rc != 0
   notify: debug freebsd python

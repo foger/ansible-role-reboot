@@ -1,0 +1,14 @@
+---
+
+- name: Check if FreeBSD should be restarted
+  command: freebsd-version -k
+  register: freebsd_version
+  changed_when: freebsd_version.stdout != ansible_kernel
+  failed_when:
+    - freebsd_version.rc != 0
+  when:
+    - not reboot_always | bool
+    - ansible_distribution == 'FreeBSD'
+  notify:
+    - debug freebsd
+  tags: checkfbsd
