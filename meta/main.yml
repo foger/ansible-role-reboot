@@ -4,6 +4,7 @@ galaxy_info:
   license: MIT
 
   min_ansible_version: 2.7
+
   platforms:
     - name: EL
       versions:
@@ -11,13 +12,15 @@ galaxy_info:
         - 7
     - name: Fedora
       versions:
-        - all
+        - 31
     - name: Debian
       versions:
-        - all
+        - 8
+        - 9
     - name: Ubuntu
       versions:
-        - all
+        - bionic
+        - xenial
 
   galaxy_tags:
     - reboot
